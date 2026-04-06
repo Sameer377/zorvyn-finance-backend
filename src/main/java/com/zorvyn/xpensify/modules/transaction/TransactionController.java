@@ -6,6 +6,7 @@ package com.zorvyn.xpensify.modules.transaction;
  * @description
  */
 
+import com.zorvyn.xpensify.modules.transaction.dto.CreateTransactionDto;
 import com.zorvyn.xpensify.modules.transaction.dto.ResponseTransactionDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -31,7 +32,7 @@ public class TransactionController {
     @Operation(summary = "Endpoint to retrieve all transactions with optional filters for type, category, and date range")
     @GetMapping
 //    @PreAuthorize("hasAnyRole('VIEWER', 'ANALYST', 'ADMIN')")
-    public ResponseEntity<Page<TransactionResponse>> getTransactions(
+    public ResponseEntity<Page<ResponseTransactionDto>> getTransactions(
             @RequestParam(required = false) String type,
             @RequestParam(required = false) String category,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate from,
@@ -45,7 +46,7 @@ public class TransactionController {
     @Operation(summary = "Endpoint to retrieve a single transaction by its ID")
     @GetMapping("/{id}")
 //    @PreAuthorize("hasAnyRole('VIEWER', 'ANALYST', 'ADMIN')")
-    public ResponseEntity<TransactionResponse> getTransactionById(@PathVariable Long id) {
+    public ResponseEntity<ResponseTransactionDto> getTransactionById(@PathVariable Long id) {
         return ResponseEntity.ok(transactionService.getById(id));
     }
 
@@ -54,7 +55,7 @@ public class TransactionController {
     @PostMapping
 //    @PreAuthorize("hasAnyRole('ANALYST', 'ADMIN')")
     public ResponseEntity<ResponseTransactionDto> createTransaction(
-            @Valid @RequestBody RequestTransaction request) {
+            @Valid @RequestBody CreateTransactionDto request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(transactionService.create(request));
     }
 
@@ -64,7 +65,7 @@ public class TransactionController {
 //    @PreAuthorize("hasAnyRole('ANALYST', 'ADMIN')")
     public ResponseEntity<ResponseTransactionDto> updateTransaction(
             @PathVariable Long id,
-            @Valid @RequestBody RequestTransaction request) {
+            @Valid @RequestBody CreateTransactionDto request) {
         return ResponseEntity.ok(transactionService.update(id, request));
     }
 

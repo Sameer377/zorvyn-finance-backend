@@ -27,7 +27,7 @@ public class UserDtoMapper {
     }
 
     // CommonDto to Entity (for create)
-    public static User toEntity(UpdateUserDto dto) {
+    public static User toEntity(CreateUserDto dto) {
         if (dto == null) return null;
 
         return User.builder()

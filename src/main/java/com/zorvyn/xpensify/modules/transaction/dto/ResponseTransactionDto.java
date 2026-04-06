@@ -1,6 +1,8 @@
 package com.zorvyn.xpensify.modules.transaction.dto;
 
 import com.zorvyn.xpensify.core.enums.TransactionType;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -10,6 +12,13 @@ import java.time.LocalDateTime;
  * @date 06-04-2026
  * @description
  */
+
+@ToString
+@SuperBuilder
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class ResponseTransactionDto extends CommonTransactionDto{
     private Long id;
     private String categoryName;

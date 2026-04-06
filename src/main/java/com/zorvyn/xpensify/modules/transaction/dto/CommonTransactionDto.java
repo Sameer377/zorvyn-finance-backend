@@ -3,6 +3,8 @@ package com.zorvyn.xpensify.modules.transaction.dto;
 import com.zorvyn.xpensify.core.enums.TransactionType;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
 
@@ -11,6 +13,13 @@ import java.time.LocalDate;
  * @date 06-04-2026
  * @description
  */
+
+@ToString
+@SuperBuilder
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class CommonTransactionDto {
     @NotNull(message = "Amount is required")
     @Positive(message = "Amount must be greater than zero")

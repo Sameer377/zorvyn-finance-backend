@@ -24,12 +24,14 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Auth", description = "Public authentication endpoints — no token required")
 public class AuthController {
 
+    private final AuthService authService;
+
     @Operation(summary = "Endpoint to authenticate a user and return a signed JWT token")
     @PostMapping("/login")
     public ResponseEntity<?> login(
             @RequestParam @Email(message = "Email must be valid") String email,
             @RequestParam @Size(min = 8, message = "Password must be at least 8 characters") String password) {
 
-        return null;//ResponseEntity.ok(authService.login(email, password));
+        return ResponseEntity.ok(authService.login(email, password));
     }
 }

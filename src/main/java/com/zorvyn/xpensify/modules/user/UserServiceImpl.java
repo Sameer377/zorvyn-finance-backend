@@ -2,6 +2,7 @@ package com.zorvyn.xpensify.modules.user;
 
 import com.zorvyn.xpensify.core.enums.Role;
 import com.zorvyn.xpensify.exception.NotFoundException;
+import com.zorvyn.xpensify.modules.user.dto.CreateUserDto;
 import com.zorvyn.xpensify.modules.user.dto.UpdateUserDto;
 import jakarta.persistence.criteria.Predicate;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +11,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -88,7 +92,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User createUser(UpdateUserDto user) {
+    public User createUser(CreateUserDto user) {
         if (userRepository.existsByEmail(user.getEmail())) {
             throw new IllegalArgumentException("User with email " + user.getEmail() + " already exists");
         }
@@ -112,6 +116,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> getAllUsers() {
         return userRepository.findAll();
+    }
+
+    public boolean existsByEmail(String email){
+        return userRepository.existsByEmail(email);
     }
 
     @Override
@@ -150,4 +158,24 @@ public class UserServiceImpl implements UserService {
         Pageable pageable = PageRequest.of(page, size, Sort.by("id"));
         return userRepository.findAll(spec, pageable);
     }
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+
+        User user = userRepository.findByEmail(email);
+
+        if(user==null) {
+            throw new NotFoundException("User not found!");
+        }
+
+        SimpleGrantedAuthority authority =
+                new SimpleGrantedAuthority(user.getRole().name());
+
+        return new org.springframework.security.core.userdetails.User(
+                user.getEmail(),
+                user.getPassword(),
+                List.of(authority)
+        );
+    }
+
 }

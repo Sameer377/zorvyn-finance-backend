@@ -1,8 +1,10 @@
 package com.zorvyn.xpensify.modules.user;
 
 import com.zorvyn.xpensify.core.enums.Role;
+import com.zorvyn.xpensify.modules.user.dto.CreateUserDto;
 import com.zorvyn.xpensify.modules.user.dto.UpdateUserDto;
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
 
@@ -12,14 +14,23 @@ import java.util.List;
  * @description
  */
 
-public interface UserService {
+public interface UserService extends UserDetailsService {
 
     User changeUserRole(Long id, Role role);
-    User createUser(UpdateUserDto user);
+
+    User createUser(CreateUserDto user);
+
     User getUserById(Long id);
+
     List<User> getAllUsers();
+
     User updateUser(Long id, UpdateUserDto updatedUser);
+
     void deleteUser(Long id);
+
     User updateStatus(Long id,Boolean isActive);
+
     Page<User> listUsersWithFilter(UserFilter filter, Integer page, Integer size);
+
+    boolean existsByEmail(String email);
 }

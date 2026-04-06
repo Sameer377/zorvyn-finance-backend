@@ -9,6 +9,7 @@ package com.zorvyn.xpensify.modules.user;
 
 import com.zorvyn.xpensify.core.enums.Gender;
 import com.zorvyn.xpensify.core.enums.Role;
+import com.zorvyn.xpensify.modules.user.dto.CreateUserDto;
 import com.zorvyn.xpensify.modules.user.dto.UpdateUserDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -27,7 +28,7 @@ public class UserController {
     private final UserService userService;
     @Operation(summary = "Endpoint to create a new user")
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody UpdateUserDto user) {
+    public ResponseEntity<User> createUser(@RequestBody CreateUserDto user) {
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.createUser(user));
     }
 

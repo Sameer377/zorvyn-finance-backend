@@ -1,7 +1,8 @@
 package com.zorvyn.xpensify.config;
 
-import com.masai.exception.AuthException;
-import com.masai.service.UserService;
+
+import com.zorvyn.xpensify.exception.AuthException;
+import com.zorvyn.xpensify.modules.user.UserService;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.security.SignatureException;
@@ -13,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -30,7 +32,7 @@ import java.io.IOException;
 public class JwtAuthFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
-    private final UserService userService;
+    private final UserDetailsService userDetailService;
 
     @Override
     protected void doFilterInternal(
@@ -65,7 +67,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         if (email != null
                 && SecurityContextHolder.getContext().getAuthentication() == null) {
 
-            UserDetails userDetails = userService.loadUserByUsername(email);
+            UserDetails userDetails = userDetailService.loadUserByUsername(email);
 
             if (jwtUtil.validateToken(token, userDetails)) {
 
