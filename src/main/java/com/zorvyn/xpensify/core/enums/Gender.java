@@ -1,0 +1,12 @@
+package com.zorvyn.xpensify.core.enums;
+
+/**
+ * @author Sameer Shaikh
+ * @date 05-04-2026
+ * @description
+ */
+public enum Gender{
+    MALE,
+    FEMALE,
+    OTHER
+}
