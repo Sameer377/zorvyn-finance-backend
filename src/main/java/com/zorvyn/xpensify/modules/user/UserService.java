@@ -3,6 +3,7 @@ package com.zorvyn.xpensify.modules.user;
 import com.zorvyn.xpensify.core.PageResponse;
 import com.zorvyn.xpensify.core.enums.Role;
 import com.zorvyn.xpensify.modules.user.dto.CreateUserDto;
+import com.zorvyn.xpensify.modules.user.dto.ResponseUserDto;
 import com.zorvyn.xpensify.modules.user.dto.UpdateUserDto;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -31,7 +32,7 @@ public interface UserService extends UserDetailsService {
 
     User updateStatus(Long id,Boolean isActive);
 
-    PageResponse<User> listUsersWithFilter(UserFilter filter, Integer page, Integer size);
+    PageResponse<ResponseUserDto> listUsersWithFilter(UserFilter filter, Integer page, Integer size);
 
     boolean existsByEmail(String email);
 }

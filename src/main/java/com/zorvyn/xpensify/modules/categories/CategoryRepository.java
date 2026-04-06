@@ -8,5 +8,5 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
  * @date 06-04-2026
  * @description
  */
-public interface CategoryRepository extends JpaRepository<Category,Long>, JpaSpecificationExecutor<Category> {
+public interface CategoryRepository extends JpaRepository<Category,Long> {
 }

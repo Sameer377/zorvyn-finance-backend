@@ -11,6 +11,7 @@ import com.zorvyn.xpensify.core.PageResponse;
 import com.zorvyn.xpensify.core.enums.Gender;
 import com.zorvyn.xpensify.core.enums.Role;
 import com.zorvyn.xpensify.modules.user.dto.CreateUserDto;
+import com.zorvyn.xpensify.modules.user.dto.ResponseUserDto;
 import com.zorvyn.xpensify.modules.user.dto.UpdateUserDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -75,7 +76,7 @@ public class UserController {
 
     @Operation(summary = "Endpoint to get paginated list of users with optional filters")
     @GetMapping
-    public ResponseEntity<PageResponse<User>> getUsers(
+    public ResponseEntity<PageResponse<ResponseUserDto>> getUsers(
             @RequestParam(required = false) Long userId,
             @RequestParam(required = false) String firstName,
             @RequestParam(required = false) String lastName,

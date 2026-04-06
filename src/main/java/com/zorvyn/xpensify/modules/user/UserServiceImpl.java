@@ -4,6 +4,7 @@ import com.zorvyn.xpensify.core.PageResponse;
 import com.zorvyn.xpensify.core.enums.Role;
 import com.zorvyn.xpensify.exception.NotFoundException;
 import com.zorvyn.xpensify.modules.user.dto.CreateUserDto;
+import com.zorvyn.xpensify.modules.user.dto.ResponseUserDto;
 import com.zorvyn.xpensify.modules.user.dto.UpdateUserDto;
 import jakarta.persistence.criteria.Predicate;
 import lombok.RequiredArgsConstructor;
@@ -154,15 +155,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public PageResponse<User> listUsersWithFilter(UserFilter filter, Integer page, Integer size){
+    public PageResponse<ResponseUserDto> listUsersWithFilter(UserFilter filter, Integer page, Integer size){
 
         Specification<User> spec = getUserSpecification(filter);
         Pageable pageable = PageRequest.of(page, size, Sort.by("id"));
 
         Page<User> userPage = userRepository.findAll(spec, pageable);
 
-        return PageResponse.<User>builder()
-                .content(userPage.getContent())
+        return PageResponse.<ResponseUserDto>builder()
+                .content(userPage.getContent().stream().map(UserDtoMapper::toResponseDto).toList())
                 .page(userPage.getNumber())
                 .size(userPage.getSize())
                 .totalElements(userPage.getTotalElements())

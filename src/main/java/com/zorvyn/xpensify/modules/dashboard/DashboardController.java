@@ -7,6 +7,7 @@ package com.zorvyn.xpensify.modules.dashboard;
  */
 
 
+import com.zorvyn.xpensify.modules.transaction.dto.ResponseTransactionDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -14,48 +15,49 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
-@RequestMapping("/api/dashboard")
+@RequestMapping("/api/v1/dashboard")
 @RequiredArgsConstructor
-@Tag(name = "Dashboard", description = "Aggregated analytics endpoints — ANALYST and ADMIN access only")
+@Tag(name = "Dashboard", description = "Financial dashboard analytics")
 public class DashboardController {
 
-//    private final DashboardService dashboardService;
+    private final DashboardService dashboardService;
 
-    // crunch the numbers and return the key headline figures for the dashboard
-    @Operation(summary = "Endpoint to retrieve total income, total expenses, and net balance for a given period")
-    @GetMapping("/summary")
-    public ResponseEntity<?> getSummary(
-            @RequestParam(required = false) Integer year,
-            @RequestParam(required = false) Integer month
-    ) {
-        return null; //ResponseEntity.ok(dashboardService.getSummary(year, month));
+    @Operation(summary = "Endpoint to get total income")
+    @GetMapping("/total-income")
+    public ResponseEntity<Double> getTotalIncome(@RequestParam Long userId) {
+        return ResponseEntity.ok(dashboardService.getTotalIncome(userId));
     }
 
-    // break down the total spend and earnings into per-category slices
-    @Operation(summary = "Endpoint to retrieve income and expense totals grouped by category")
-    @GetMapping("/category-totals")
-    public ResponseEntity<?> getCategoryTotals(
-            @RequestParam(required = false) String type,
-            @RequestParam(required = false) Integer year) {
-        return null; //ResponseEntity.ok(dashboardService.getCategoryTotals(type, year));
+    @Operation(summary = "Endpoint to get total expense")
+    @GetMapping("/total-expense")
+    public ResponseEntity<Double> getTotalExpense(@RequestParam Long userId) {
+        return ResponseEntity.ok(dashboardService.getTotalExpense(userId));
     }
 
-    // show how income and expenses moved month by month across the year
-    @Operation(summary = "Endpoint to retrieve month-over-month income and expense trends for a given year")
-    @GetMapping("/monthly-trends")
-    public ResponseEntity<?> getMonthlyTrends(
-            @RequestParam(required = false) Integer year,
-            @RequestParam(defaultValue = "12") int months) {
-        return null; //ResponseEntity.ok(dashboardService.getMonthlyTrends(year, months));
+    @Operation(summary = "Endpoint to get net balance")
+    @GetMapping("/net-balance")
+    public ResponseEntity<Double> getNetBalance(@RequestParam Long userId) {
+        return ResponseEntity.ok(dashboardService.getNetBalance(userId));
     }
 
-    // grab the latest transactions to populate the recent activity feed
-    @Operation(summary = "Endpoint to retrieve the most recent N transactions for the activity feed")
+    @Operation(summary = "Endpoint to get category-wise summary")
+    @GetMapping("/category-summary")
+    public ResponseEntity<Map<String, Double>> getCategorySummary(@RequestParam Long userId) {
+        return ResponseEntity.ok(dashboardService.getCategorySummary(userId));
+    }
+
+    @Operation(summary = "Endpoint to get recent transactions")
     @GetMapping("/recent")
-    public ResponseEntity<?> getRecentTransactions(
-            @RequestParam(defaultValue = "10") int limit) {
-        return null; //ResponseEntity.ok(dashboardService.getRecentTransactions(limit));
+    public ResponseEntity<List<ResponseTransactionDto>> getRecentTransactions(@RequestParam Long userId) {
+        return ResponseEntity.ok(dashboardService.getRecentTransactions(userId));
+    }
+
+    @Operation(summary = "Endpoint to get monthly summary")
+    @GetMapping("/monthly")
+    public ResponseEntity<Map<String, Map<String, Double>>> getMonthlySummary(@RequestParam Long userId) {
+        return ResponseEntity.ok(dashboardService.getMonthlySummary(userId));
     }
 }
