@@ -1,5 +1,6 @@
 package com.zorvyn.xpensify.modules.user;
 
+import com.zorvyn.xpensify.core.PageResponse;
 import com.zorvyn.xpensify.core.enums.Role;
 import com.zorvyn.xpensify.exception.NotFoundException;
 import com.zorvyn.xpensify.modules.user.dto.CreateUserDto;
@@ -98,6 +99,7 @@ public class UserServiceImpl implements UserService {
         }
 
         User userEntity = UserDtoMapper.toEntity(user);
+        userEntity.setPassword(passwordEncoder.encode(user.getPassword()));
         userEntity.setIsActive(Boolean.TRUE);
         return userRepository.save(userEntity);
     }
@@ -152,11 +154,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Page<User> listUsersWithFilter(UserFilter filter, Integer page, Integer size){
+    public PageResponse<User> listUsersWithFilter(UserFilter filter, Integer page, Integer size){
 
         Specification<User> spec = getUserSpecification(filter);
         Pageable pageable = PageRequest.of(page, size, Sort.by("id"));
-        return userRepository.findAll(spec, pageable);
+
+        Page<User> userPage = userRepository.findAll(spec, pageable);
+
+        return PageResponse.<User>builder()
+                .content(userPage.getContent())
+                .page(userPage.getNumber())
+                .size(userPage.getSize())
+                .totalElements(userPage.getTotalElements())
+                .totalPages(userPage.getTotalPages())
+                .build();
     }
 
     @Override

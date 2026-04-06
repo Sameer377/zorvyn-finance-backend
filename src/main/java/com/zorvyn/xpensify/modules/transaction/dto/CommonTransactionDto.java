@@ -1,6 +1,10 @@
 package com.zorvyn.xpensify.modules.transaction.dto;
 
+import com.zorvyn.xpensify.core.enums.TransactionStatus;
 import com.zorvyn.xpensify.core.enums.TransactionType;
+import jakarta.persistence.Column;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.*;
@@ -27,6 +31,12 @@ public class CommonTransactionDto {
 
     @NotNull(message = "Transaction type is required")
     private TransactionType type;
+
+    private String fromAccountNumber;
+
+    private String toAccountNumber;
+
+    private TransactionStatus status;
 
     private Long categoryId;
 

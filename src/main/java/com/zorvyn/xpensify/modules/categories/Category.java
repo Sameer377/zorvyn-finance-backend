@@ -1,4 +1,4 @@
-package com.zorvyn.xpensify.modules.transaction;
+package com.zorvyn.xpensify.modules.categories;
 
 /**
  * @author Sameer Shaikh

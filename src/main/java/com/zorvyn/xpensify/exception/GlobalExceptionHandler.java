@@ -22,6 +22,11 @@ public class GlobalExceptionHandler {
 		return buildResponse(HttpStatus.FORBIDDEN,pnf.getMessage());
 	}
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<?> illegalArgumentException(IllegalArgumentException pnf,WebRequest wr){
+        return buildResponse(HttpStatus.BAD_REQUEST,pnf.getMessage());
+    }
+
     private ResponseEntity<Map<String, Object>> buildResponse(HttpStatus status, String message) {
         Map<String, Object> errorResponse = new HashMap<>();
         errorResponse.put("message", message);

@@ -1,5 +1,6 @@
 package com.zorvyn.xpensify.modules.user;
 
+import com.zorvyn.xpensify.core.PageResponse;
 import com.zorvyn.xpensify.core.enums.Role;
 import com.zorvyn.xpensify.modules.user.dto.CreateUserDto;
 import com.zorvyn.xpensify.modules.user.dto.UpdateUserDto;
@@ -30,7 +31,7 @@ public interface UserService extends UserDetailsService {
 
     User updateStatus(Long id,Boolean isActive);
 
-    Page<User> listUsersWithFilter(UserFilter filter, Integer page, Integer size);
+    PageResponse<User> listUsersWithFilter(UserFilter filter, Integer page, Integer size);
 
     boolean existsByEmail(String email);
 }

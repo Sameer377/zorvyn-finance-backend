@@ -1,5 +1,6 @@
 package com.zorvyn.xpensify.config;
 
+import com.zorvyn.xpensify.exception.CustomAccessDeniedHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -32,11 +33,17 @@ import java.util.List;
 public class SecurityConfig {
 
     private final JwtAuthFilter jwtAuthFilter;
+    private final CustomAccessDeniedHandler accessDeniedHandler;
+    private final CustomAuthEntryPoint authEntryPoint;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint(authEntryPoint)
+                        .accessDeniedHandler(accessDeniedHandler)
+                )
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .sessionManagement(session ->
@@ -44,6 +51,13 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(auth -> auth
 
+                        .requestMatchers("/api/v1/auth/**").permitAll()
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+
+                        .requestMatchers("/api/v1/users/**").hasRole("ADMIN")
+                        .requestMatchers("/api/v1/dashboard/**").hasAnyRole("ADMIN", "ANALYST")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/transactions/**").hasAnyRole("ADMIN", "ANALYST", "VIEWER")
+                        .requestMatchers("/api/v1/transactions/**").hasAnyRole("ADMIN", "ANALYST")
                         .requestMatchers("/api/v1/auth/**").permitAll()
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
 

@@ -7,7 +7,9 @@ package com.zorvyn.xpensify.modules.transaction;
  */
 
 import com.zorvyn.xpensify.core.BaseEntity;
+import com.zorvyn.xpensify.core.enums.TransactionStatus;
 import com.zorvyn.xpensify.core.enums.TransactionType;
+import com.zorvyn.xpensify.modules.categories.Category;
 import com.zorvyn.xpensify.modules.user.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -32,7 +34,18 @@ public class Transactions extends BaseEntity {
     @Column(name = "type", nullable = false)
     private TransactionType type;
 
+    @Column(name = "from_account_number")
+    private String fromAccountNumber;
+
+    @Column(name = "to_account_number")
+    private String toAccountNumber;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    private TransactionStatus status;
+
     @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "category_id")
     private Category category;
 
     @Column(name = "record_date", nullable = false)
@@ -42,5 +55,6 @@ public class Transactions extends BaseEntity {
     private String note;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
     private User user;
 }

@@ -17,7 +17,7 @@ spring:
 
 jwt:
   secret: qwertyuiopasdfghjklzxcvbnmQWERTYUASDFGHJZXCVBNwerty
-  expiry: 60000
+  expiry: 900000
 
 springdoc:
   swagger-ui:

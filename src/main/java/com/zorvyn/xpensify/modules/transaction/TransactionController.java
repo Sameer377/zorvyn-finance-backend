@@ -6,8 +6,12 @@ package com.zorvyn.xpensify.modules.transaction;
  * @description
  */
 
+import com.zorvyn.xpensify.core.PageResponse;
+import com.zorvyn.xpensify.core.enums.TransactionStatus;
+import com.zorvyn.xpensify.core.enums.TransactionType;
 import com.zorvyn.xpensify.modules.transaction.dto.CreateTransactionDto;
 import com.zorvyn.xpensify.modules.transaction.dto.ResponseTransactionDto;
+import com.zorvyn.xpensify.modules.transaction.dto.TransactionFilter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -19,60 +23,73 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-
 @RestController
-@RequestMapping("/api/transactions")
+@RequestMapping("/api/v1/transactions")
 @RequiredArgsConstructor
 @Tag(name = "Transactions", description = "Financial record endpoints — role-gated per operation")
 public class TransactionController {
 
     private final TransactionService transactionService;
 
-    // fetch a paginated list of records narrowed down by type, category, or date range
-    @Operation(summary = "Endpoint to retrieve all transactions with optional filters for type, category, and date range")
+    @Operation(summary = "Endpoint to retrieve transactions with optional filters")
     @GetMapping
-//    @PreAuthorize("hasAnyRole('VIEWER', 'ANALYST', 'ADMIN')")
-    public ResponseEntity<Page<ResponseTransactionDto>> getTransactions(
-            @RequestParam(required = false) String type,
+    public ResponseEntity<PageResponse<ResponseTransactionDto>> getTransactions(
+            @RequestParam(required = false) Long id,
+            @RequestParam(required = false) Long userId,
+            @RequestParam(required = false) TransactionType type,
+            @RequestParam(required = false) TransactionStatus status,
             @RequestParam(required = false) String category,
+            @RequestParam(required = false) String fromAccountNumber,
+            @RequestParam(required = false) String toAccountNumber,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate from,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate to,
-            @RequestParam(defaultValue = "0")  int page,
-            @RequestParam(defaultValue = "20") int size) {
-        return ResponseEntity.ok(transactionService.getTransactions(type, category, from, to, page, size));
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "20") Integer size
+    ) {
+
+        TransactionFilter filter = TransactionFilter.builder()
+                .id(id)
+                .userId(userId)
+                .type(type)
+                .status(status)
+                .category(category)
+                .fromAccountNumber(fromAccountNumber)
+                .toAccountNumber(toAccountNumber)
+                .from(from)
+                .to(to)
+                .build();
+
+        return ResponseEntity.ok(
+                transactionService.listTransactionByFilter(filter, page, size)
+        );
     }
 
-    // get the full details of one transaction using its unique ID
-    @Operation(summary = "Endpoint to retrieve a single transaction by its ID")
+    @Operation(summary = "Endpoint to retrieve a transaction by its ID")
     @GetMapping("/{id}")
-//    @PreAuthorize("hasAnyRole('VIEWER', 'ANALYST', 'ADMIN')")
     public ResponseEntity<ResponseTransactionDto> getTransactionById(@PathVariable Long id) {
         return ResponseEntity.ok(transactionService.getById(id));
     }
 
-    // add a new income or expense entry to the financial records
-    @Operation(summary = "Endpoint to create a new financial transaction with amount, type, category, and date")
+    @Operation(summary = "Endpoint to create a new transaction")
     @PostMapping
-//    @PreAuthorize("hasAnyRole('ANALYST', 'ADMIN')")
     public ResponseEntity<ResponseTransactionDto> createTransaction(
-            @Valid @RequestBody CreateTransactionDto request) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(transactionService.create(request));
+            @Valid @RequestBody CreateTransactionDto request
+    ) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(transactionService.create(request));
     }
 
-    // overwrite all fields of an existing transaction with new values
-    @Operation(summary = "Endpoint to update an existing transaction by its ID")
+    @Operation(summary = "Endpoint to update an existing transaction")
     @PutMapping("/{id}")
-//    @PreAuthorize("hasAnyRole('ANALYST', 'ADMIN')")
     public ResponseEntity<ResponseTransactionDto> updateTransaction(
             @PathVariable Long id,
-            @Valid @RequestBody CreateTransactionDto request) {
+            @Valid @RequestBody CreateTransactionDto request
+    ) {
         return ResponseEntity.ok(transactionService.update(id, request));
     }
 
-    // soft-delete a transaction so it disappears from views but history stays intact
-    @Operation(summary = "Endpoint to soft-delete a transaction by its ID, preserving historical data")
+    @Operation(summary = "Endpoint to soft delete a transaction")
     @DeleteMapping("/{id}")
-//    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteTransaction(@PathVariable Long id) {
         transactionService.softDelete(id);
         return ResponseEntity.noContent().build();

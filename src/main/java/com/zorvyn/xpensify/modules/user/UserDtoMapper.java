@@ -7,6 +7,7 @@ import com.zorvyn.xpensify.modules.user.dto.*;
  * @date 05-04-2026
  * @description
  */
+
 public class UserDtoMapper {
 
     // Entity to ResponseDto

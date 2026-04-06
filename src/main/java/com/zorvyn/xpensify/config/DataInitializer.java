@@ -32,7 +32,7 @@ public class DataInitializer implements CommandLineRunner {
             CreateUserDto admin = CreateUserDto.builder()
                     .firstName("Default Admin")
                     .email(adminEmail)
-                    .password(passwordEncoder.encode("admin@123"))
+                    .password("admin@123")
                     .role(Role.ROLE_ADMIN)
                     .build();
 
