@@ -34,9 +34,11 @@ public class UserDtoMapper {
                 .firstName(dto.getFirstName())
                 .lastName(dto.getLastName())
                 .email(dto.getEmail())
+                .password(dto.getPassword())
                 .countryCode(dto.getCountryCode())
                 .phoneNumber(dto.getPhoneNumber())
                 .gender(dto.getGender())
+                .role(dto.getRole())
                 .build();
     }
 
