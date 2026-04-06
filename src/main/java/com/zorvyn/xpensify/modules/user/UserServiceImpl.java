@@ -98,7 +98,7 @@ public class UserServiceImpl implements UserService {
         }
 
         User userEntity = UserDtoMapper.toEntity(user);
-
+        userEntity.setIsActive(Boolean.TRUE);
         return userRepository.save(userEntity);
     }
 
