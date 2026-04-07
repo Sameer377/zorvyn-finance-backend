@@ -1,122 +1,46 @@
-API Endpoints
+# Xpensify — Finance Data Processing and Access Control Backend
 
-Admin creds 
-admin@gmail.com
-admin@123
+A role-based finance dashboard backend built for the Zorvyn FinTech backend engineering assessment. Manages users, transactions, and analytics with JWT-based authentication and strict role-based access control.
 
-Base URL
-http://localhost:9000
+---
 
-All endpoints are secured using JWT unless mentioned otherwise.
+## Tech Stack
 
-Authentication
-Login
+Java 21, Spring Boot 3, Spring Security, JWT, PostgreSQL, Spring Data JPA, Jakarta Validation, SpringDoc OpenAPI
 
-POST /api/v1/auth/login
-Authenticate a user and receive a JWT token.
+---
 
-Users
-Get user by ID
+## API Docs
 
-GET /api/v1/users/{id}
+```
+http://localhost:8080/swagger-ui/index.html
+```
 
-Create user
+---
 
-POST /api/v1/users
+## Features
 
-Update user
+- JWT authentication with role-based access control — ADMIN, ANALYST, VIEWER
+- User management — create, update role, activate/deactivate
+- Transaction management — CRUD with filtering, pagination, and soft delete
+- Dashboard analytics — summary, category totals, monthly trends, recent activity
 
-PUT /api/v1/users/{id}
+---
 
-Delete user
+## Design Decisions
 
-DELETE /api/v1/users/{id}
+- Access control centralised in `SecurityConfig` — single source of truth for all role rules
+- DTO pattern with `CommonDto`, `CreateDto`, `UpdateDto`, `ResponseDto` for clean separation
+- BCrypt password hashing, password never returned in any response
+- Soft delete on transactions to preserve analytics history
+- No public registration — only admin creates users, first admin is seeded on startup
 
-Get users with filters
+---
 
-GET /api/v1/users
-Supports pagination and filtering.
+## Database
 
-Update user status
+Three tables — **Users**, **Categories**, **Transactions**
 
-PATCH /api/v1/users/{id}/status
+---
 
-Change user role
-
-PATCH /api/v1/users/{id}/role
-
-Transactions
-Get transaction by ID
-
-GET /api/v1/transactions/{id}
-
-Create transaction
-
-POST /api/v1/transactions
-
-Update transaction
-
-PUT /api/v1/transactions/{id}
-
-Delete transaction
-
-DELETE /api/v1/transactions/{id}
-
-Get transactions with filters
-
-GET /api/v1/transactions
-
-Supports filtering by:
-
-userId
-type
-status
-category
-account numbers
-date range
-pagination
-Categories
-Get category by ID
-
-GET /api/v1/categories/{id}
-
-Create category
-
-POST /api/v1/categories
-
-Update category
-
-PUT /api/v1/categories/{id}
-
-Delete category
-
-DELETE /api/v1/categories/{id}
-
-Get all categories
-
-GET /api/v1/categories
-
-Dashboard
-Get total income
-
-GET /api/v1/dashboard/total-income
-
-Get total expense
-
-GET /api/v1/dashboard/total-expense
-
-Get net balance
-
-GET /api/v1/dashboard/net-balance
-
-Get category-wise summary
-
-GET /api/v1/dashboard/category-summary
-
-Get monthly summary
-
-GET /api/v1/dashboard/monthly
-
-Get recent transactions
-
-GET /api/v1/dashboard/recent
+*Sameer Shaikh — Zorvyn FinTech Backend Assessment*
