@@ -13,7 +13,7 @@ Java 21, Spring Boot 3, Spring Security, JWT, PostgreSQL, Spring Data JPA, Jakar
 ## API Docs
 
 ```
-http://localhost:8080/swagger-ui/index.html
+https://finance-backend-lcht.onrender.com/swagger-ui/index.html
 ```
 
 ---
