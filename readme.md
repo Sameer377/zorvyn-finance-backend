@@ -12,17 +12,30 @@ Java 21, Spring Boot 3, Spring Security, JWT, PostgreSQL, Spring Data JPA, Jakar
 
 ## API Docs
 
+### swagger
 ```
 https://finance-backend-lcht.onrender.com/swagger-ui/index.html
+```
+### Postman - import this in collection
+```
+https://finance-backend-lcht.onrender.com/v3/api-docs
+```
+
+## Default admin credentials 
+
+```
+Username : admin@gmail.com
+Password : admin@123 
 ```
 
 ---
 
 ## Features
 
+- Used Module based project structure for future scale.
 - JWT authentication with role-based access control — ADMIN, ANALYST, VIEWER
 - User management — create, update role, activate/deactivate
-- Transaction management — CRUD with filtering, pagination, and soft delete
+- Transaction management — CRUD with Audit, filtering, pagination, and soft delete
 - Dashboard analytics — summary, category totals, monthly trends, recent activity
 
 ---
